@@ -1,0 +1,14 @@
+[project]
+name = "switch-event-analysis"
+version = "0.1.0"
+description = "Label-switch decoding accuracy analysis for same-frequency phase-coded SSVEP experiments."
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    "matplotlib>=3.8",
+    "numpy>=1.26",
+    "scikit-learn>=1.4",
+    "scipy>=1.11",
+]
+
+[tool.uv]
+package = false

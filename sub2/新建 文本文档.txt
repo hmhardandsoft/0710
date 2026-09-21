@@ -1,0 +1,29 @@
+def main():
+    """Run the continuous same-frequency phase-coded SSVEP task."""
+
+    # ---------------- User-adjustable experiment parameters ----------------
+    online = True
+    task_m = 9
+    block_count = 10
+    cue_duration_min = 3.0
+    cue_duration_max = 5.0
+    stim_square_scale_by_m = {
+        2: 0.22,
+        4: 0.22,
+        9: 0.22,
+    }
+    stim_gap_scale_by_m = {
+        2: 0.45,
+        4: 0.45,
+        9: 0.50,
+    }
+
+    # ---------------- Decoder / acquisition parameters ----------------
+    stim_freq = 10.0
+    fs = 2000
+    window_size = 104
+    min_samples_per_class = 20
+    update_stride = 20
+    fusion_window_edges = 1
+    min_decode_interval_ms = 100.0
+    debug_decoder = False

@@ -1,0 +1,39 @@
+Subject: sub2
+Task M: 2
+Blocks: 1
+Cue events: 20
+Cue counts by label: [10, 10]
+Chance level: 50.00%
+LATENCY: 1.000s
+END_TIME: 2.000s
+STEP_SIZE: 0.025s
+WIN_LENS: [0.05, 0.1]
+SPLIT_MODE: exclude_current_cue_epoch
+PEAK_ALIGNMENT_MODE: global_reference
+REFERENCE_INTENSITY_LABEL: 1
+INTENSITY_THRESHOLD: 0.5
+
+Block files:
+  block 0: 20260721_154842, Fs=2000.0, EEG=(159530, 9), States=(159530, 12)
+
+Window 0.050s
+  valid_tests: min=20, max=20, mean=20.0
+  train_size_stats: {'min': 745, 'max': 764, 'mean': 754.373076923077, 'median': 755.0, 'count': 780}
+  skip_summary: {'test_boundary': 0, 'test_crosses_cue_epoch': 0, 'missing_reference_peak': 0, 'empty_or_incomplete_train': 0, 'fb_train_failed': 0}
+  Aug_LDA: full_mean=86.67%, per_label=[89.49, 83.85]
+  Aug_FB_LDA: full_mean=91.03%, per_label=[93.33, 88.72]
+  Aug_TRCA: full_mean=89.87%, per_label=[93.33, 86.41]
+  Aug_FB_TRCA: full_mean=92.82%, per_label=[96.41, 89.23]
+  Aug_eTRCA: full_mean=91.67%, per_label=[96.92, 86.41]
+  Aug_FB_eTRCA: full_mean=93.08%, per_label=[97.18, 88.97]
+
+Window 0.100s
+  valid_tests: min=20, max=20, mean=20.0
+  train_size_stats: {'min': 744, 'max': 763, 'mean': 753.4310810810811, 'median': 754.0, 'count': 740}
+  skip_summary: {'test_boundary': 0, 'test_crosses_cue_epoch': 0, 'missing_reference_peak': 0, 'empty_or_incomplete_train': 0, 'fb_train_failed': 0}
+  Aug_LDA: full_mean=91.76%, per_label=[94.86, 88.65]
+  Aug_FB_LDA: full_mean=91.22%, per_label=[92.97, 89.46]
+  Aug_TRCA: full_mean=96.22%, per_label=[100.0, 92.43]
+  Aug_FB_TRCA: full_mean=96.35%, per_label=[100.0, 92.7]
+  Aug_eTRCA: full_mean=96.08%, per_label=[100.0, 92.16]
+  Aug_FB_eTRCA: full_mean=96.08%, per_label=[100.0, 92.16]

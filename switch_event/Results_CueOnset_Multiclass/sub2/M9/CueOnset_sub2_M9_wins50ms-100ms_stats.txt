@@ -1,0 +1,39 @@
+Subject: sub2
+Task M: 9
+Blocks: 1
+Cue events: 90
+Cue counts by label: [10, 10, 10, 10, 10, 10, 10, 10, 10]
+Chance level: 11.11%
+LATENCY: 1.000s
+END_TIME: 2.000s
+STEP_SIZE: 0.025s
+WIN_LENS: [0.05, 0.1]
+SPLIT_MODE: exclude_current_cue_epoch
+PEAK_ALIGNMENT_MODE: global_reference
+REFERENCE_INTENSITY_LABEL: 1
+INTENSITY_THRESHOLD: 0.5
+
+Block files:
+  block 0: 20260721_165413, Fs=2000.0, EEG=(732710, 9), States=(732710, 19)
+
+Window 0.050s
+  valid_tests: min=90, max=90, mean=90.0
+  train_size_stats: {'min': 3603, 'max': 3624, 'mean': 3613.2153846153847, 'median': 3614.0, 'count': 3510}
+  skip_summary: {'test_boundary': 0, 'test_crosses_cue_epoch': 0, 'missing_reference_peak': 0, 'empty_or_incomplete_train': 0, 'fb_train_failed': 0}
+  Aug_LDA: full_mean=49.83%, per_label=[55.38, 45.13, 41.28, 44.36, 61.03, 53.59, 36.67, 48.46, 62.56]
+  Aug_FB_LDA: full_mean=79.63%, per_label=[89.74, 79.23, 80.51, 81.28, 83.85, 74.62, 70.51, 75.64, 81.28]
+  Aug_TRCA: full_mean=50.11%, per_label=[57.18, 47.18, 54.62, 45.38, 58.97, 39.23, 47.18, 45.13, 56.15]
+  Aug_FB_TRCA: full_mean=65.24%, per_label=[78.46, 61.28, 70.51, 62.56, 75.13, 54.62, 57.95, 60.26, 66.41]
+  Aug_eTRCA: full_mean=56.52%, per_label=[58.46, 52.05, 54.87, 56.41, 66.41, 51.28, 53.08, 52.31, 63.85]
+  Aug_FB_eTRCA: full_mean=72.08%, per_label=[85.13, 65.64, 75.64, 68.72, 79.23, 64.87, 66.67, 66.67, 76.15]
+
+Window 0.100s
+  valid_tests: min=90, max=90, mean=90.0
+  train_size_stats: {'min': 3602, 'max': 3624, 'mean': 3612.229129129129, 'median': 3613.0, 'count': 3330}
+  skip_summary: {'test_boundary': 0, 'test_crosses_cue_epoch': 0, 'missing_reference_peak': 0, 'empty_or_incomplete_train': 0, 'fb_train_failed': 0}
+  Aug_LDA: full_mean=71.77%, per_label=[78.92, 68.65, 66.22, 69.73, 77.57, 70.0, 65.14, 72.43, 77.3]
+  Aug_FB_LDA: full_mean=83.60%, per_label=[92.97, 80.81, 86.76, 89.19, 86.49, 78.65, 75.14, 78.65, 83.78]
+  Aug_TRCA: full_mean=67.09%, per_label=[70.54, 60.27, 67.3, 64.59, 77.84, 65.68, 61.08, 62.43, 74.05]
+  Aug_FB_TRCA: full_mean=77.12%, per_label=[91.08, 72.43, 83.24, 80.0, 82.97, 67.03, 70.0, 70.27, 77.03]
+  Aug_eTRCA: full_mean=67.63%, per_label=[74.86, 62.97, 67.03, 66.22, 78.38, 63.78, 61.89, 62.43, 71.08]
+  Aug_FB_eTRCA: full_mean=79.22%, per_label=[91.35, 75.68, 84.59, 78.65, 83.78, 72.16, 73.24, 72.97, 80.54]

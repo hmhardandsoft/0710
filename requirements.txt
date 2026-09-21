@@ -1,0 +1,7 @@
+econexg @ git+https://github.com/Niantong-Intelligence/eConEXG.git@ff7f447906eaf9df540ddaf44fa48934544ed478
+glfw>=2.8,<3
+numpy>=1.26,<3
+PyOpenGL>=3.1,<4
+scikit-learn>=1.4,<2
+scipy>=1.13,<2
+tqdm>=4.66,<5
