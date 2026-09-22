@@ -202,12 +202,14 @@ class SSVEPStimulator:
         ]
 
     def _make_cue_schedule(self):
+        if self.passive_m2:
+            return self._make_passive_m2_schedule()
+
         schedule = []
         block_count = int(self.share.block_count.value)
         d_min = float(self.share.cue_duration_min.value)
         d_max = float(self.share.cue_duration_max.value)
         for block_idx in range(block_count):
-            fixed_cue_position = random.choice((1, 2)) if self.passive_m2 else None
             labels = list(range(1, self.task_m + 1))
             random.shuffle(labels)
             if schedule and labels[0] == schedule[-1]["label"]:
@@ -217,25 +219,44 @@ class SSVEPStimulator:
                         break
             for label in labels:
                 duration_sec = random.uniform(d_min, d_max)
-                if self.passive_m2:
-                    phase_labels_by_position = [0, 0]
-                    phase_labels_by_position[fixed_cue_position - 1] = label
-                    phase_labels_by_position[1 - (fixed_cue_position - 1)] = 3 - label
-                    cue_position = fixed_cue_position
-                else:
-                    phase_labels_by_position = list(range(1, self.task_m + 1))
-                    cue_position = label
                 schedule.append(
                     {
                         "block_idx": block_idx,
                         "label": label,
                         "phase": self.phases[label - 1],
-                        "cue_position": cue_position,
-                        "phase_labels_by_position": tuple(phase_labels_by_position),
+                        "cue_position": label,
+                        "phase_labels_by_position": tuple(range(1, self.task_m + 1)),
                         "duration_sec": duration_sec,
                         "duration_frames": max(1, int(round(duration_sec * self.refresh_rate))),
                     }
                 )
+        return schedule
+
+    def _make_passive_m2_schedule(self):
+        schedule = []
+        repetitions_per_label = int(self.share.block_count.value)
+        d_min = float(self.share.cue_duration_min.value)
+        d_max = float(self.share.cue_duration_max.value)
+        fixed_cue_position = random.choice((1, 2))
+        first_label = random.choice((1, 2))
+
+        for trial_idx in range(repetitions_per_label * 2):
+            label = first_label if trial_idx % 2 == 0 else 3 - first_label
+            phase_labels_by_position = [0, 0]
+            phase_labels_by_position[fixed_cue_position - 1] = label
+            phase_labels_by_position[1 - (fixed_cue_position - 1)] = 3 - label
+            duration_sec = random.uniform(d_min, d_max)
+            schedule.append(
+                {
+                    "block_idx": trial_idx // 2,
+                    "label": label,
+                    "phase": self.phases[label - 1],
+                    "cue_position": fixed_cue_position,
+                    "phase_labels_by_position": tuple(phase_labels_by_position),
+                    "duration_sec": duration_sec,
+                    "duration_frames": max(1, int(round(duration_sec * self.refresh_rate))),
+                }
+            )
         return schedule
 
     def _key_callback(self, window, key, scancode, action, mods):

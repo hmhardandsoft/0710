@@ -13,7 +13,7 @@ def main():
 
     # ---------------- User-adjustable experiment parameters ----------------
     online = False
-    task_m = 4
+    task_m = 2
     paradigm_mode = "active"  # "active" or "passive"; passive requires task_m=2
     block_count = 10
     cue_duration_min = 3.0
