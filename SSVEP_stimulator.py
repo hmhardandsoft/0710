@@ -11,6 +11,7 @@ import math
 import random
 import sys
 import time
+from fractions import Fraction
 
 import glfw
 from OpenGL.GL import (
@@ -116,6 +117,13 @@ class SSVEPStimulator:
         self.positions = self._make_positions()
         self._warn_if_layout_too_large()
         self.phases = [2.0 * math.pi * i / self.task_m for i in range(self.task_m)]
+        cycles_per_frame = (
+            Fraction(str(self.stim_freq)).limit_denominator(1_000_000)
+            / self.refresh_rate
+        )
+        self.phase_step_num = cycles_per_frame.numerator
+        self.phase_step_den = cycles_per_frame.denominator
+        self.phase_denominator = self.phase_step_den * self.task_m
         self.cue_schedule = self._make_cue_schedule()
         self.total_frames = sum(item["duration_frames"] for item in self.cue_schedule)
 
@@ -138,6 +146,16 @@ class SSVEPStimulator:
             f"cues={len(self.cue_schedule)}, square={self.square_side:.1f}px, gap={self.gap:.1f}px",
             flush=True,
         )
+
+        nominal_period = self.refresh_rate / self.stim_freq
+        rounded_period = int(round(nominal_period))
+        if abs(nominal_period - rounded_period) < 1e-9:
+            if rounded_period % self.task_m != 0:
+                print(
+                    f"[Stim] WARNING: {rounded_period} frames/cycle is not divisible "
+                    f"by M={self.task_m}; phase spacing will be frame-quantized.",
+                    flush=True,
+                )
 
         self.recording_process = None
         self.decoder_process = None
@@ -352,11 +370,19 @@ class SSVEPStimulator:
         glVertex2f(x, tip_y)
         glEnd()
 
+    def _phase_intensities_for_frame(self, frame_idx):
+        """Return deterministic square-wave samples for phases 2*pi*i/M."""
+        base_tick = int(frame_idx) * self.phase_step_num * self.task_m
+        return [
+            1.0
+            if 2 * ((base_tick + phase_idx * self.phase_step_den) % self.phase_denominator)
+            < self.phase_denominator
+            else 0.0
+            for phase_idx in range(self.task_m)
+        ]
+
     def _set_shared_state(self, frame_idx, cue, cue_elapsed_sec):
-        phase_intensities = []
-        for phase in self.phases:
-            theta = 2.0 * math.pi * self.stim_freq * frame_idx / self.refresh_rate + phase
-            phase_intensities.append(1.0 if math.sin(theta) >= 0.0 else 0.0)
+        phase_intensities = self._phase_intensities_for_frame(frame_idx)
 
         # Decoder references stay phase ordered; only the on-screen mapping swaps.
         display_intensities = [
@@ -367,7 +393,8 @@ class SSVEPStimulator:
         self.share.frame_idx.value = int(frame_idx)
         self.share.true_label.value = int(cue["label"])
         self.share.target_phase.value = float(cue["phase"])
-        self.share.is_training.value = True
+        skip_seconds = float(self.share.training_skip_after_cue_ms.value) / 1000.0
+        self.share.is_training.value = cue_elapsed_sec >= skip_seconds
         self.share.cue_elapsed_sec.value = float(cue_elapsed_sec)
         self.share.cue_duration_sec.value = float(cue["duration_sec"])
         self.share.cue_position.value = int(cue["cue_position"])

@@ -143,6 +143,9 @@ class SSVEPdecoderProcess(mp.Process):
         fs = int(self.share.fs.value)
         task_m = int(self.share.task_m.value)
         min_samples = int(self.share.min_samples_per_class.value)
+        training_skip_after_cue_ms = float(
+            self.share.training_skip_after_cue_ms.value
+        )
         update_stride = int(self.share.update_stride.value)
         fusion_window_edges = max(1, int(self.share.fusion_window_edges.value))
         min_decode_interval_ms = float(self.share.min_decode_interval_ms.value)
@@ -159,6 +162,7 @@ class SSVEPdecoderProcess(mp.Process):
         raw_cols = SharedState.EEG_CHANNELS
         state_start = raw_cols
         true_label_col = state_start + SharedState.STATE_COLUMNS.index("true_label")
+        is_training_col = state_start + SharedState.STATE_COLUMNS.index("is_training")
         intensity_start = state_start + SharedState.STATE_COLUMNS.index("intensity_1")
 
         buff_data = np.frombuffer(
@@ -192,6 +196,7 @@ class SSVEPdecoderProcess(mp.Process):
             print(
                 f"[Decoder] run fs={fs}, window={window_size}, half={half_window}, "
                 f"channels=raw[1:6], fusion_window_edges={fusion_window_edges}, "
+                f"training_skip_after_cue_ms={training_skip_after_cue_ms}, "
                 f"min_decode_interval_ms={min_decode_interval_ms}, "
                 f"min_decode_interval_samples={min_decode_interval_samples}",
                 flush=True,
@@ -272,8 +277,11 @@ class SSVEPdecoderProcess(mp.Process):
                 self.share.start_predict.value = False
                 self.share.predict_label.value = 0
 
-            for edge_idx in detected_edges:
-                decoder.add_sample(edge_idx, feature, label)
+            # Gate training with the state captured at the centered edge. Prediction
+            # remains active during the post-cue transition interval.
+            if edge_row[is_training_col] >= 0.5:
+                for edge_idx in detected_edges:
+                    decoder.add_sample(edge_idx, feature, label)
 
             if decoder.all_ready() and not has_reported_all_ready:
                 has_reported_all_ready = True

@@ -42,6 +42,7 @@ class SharedState:
         cue_duration_min: float = 3.0,
         cue_duration_max: float = 5.0,
         min_samples_per_class: int = 10,
+        training_skip_after_cue_ms: float = 500.0,
         update_stride: int = 20,
         fusion_window_edges: int = 1,
         min_decode_interval_ms: float = 0.0,
@@ -56,6 +57,8 @@ class SharedState:
             raise ValueError("passive paradigm requires task_m=2")
         if cue_duration_min <= 0 or cue_duration_max < cue_duration_min:
             raise ValueError("Invalid cue duration range")
+        if training_skip_after_cue_ms < 0:
+            raise ValueError("training_skip_after_cue_ms must be non-negative")
 
         self.window_size = mp.Value("i", int(window_size))
         self.fs = mp.Value("i", int(fs))
@@ -68,6 +71,9 @@ class SharedState:
         self.cue_duration_min = mp.Value("f", float(cue_duration_min))
         self.cue_duration_max = mp.Value("f", float(cue_duration_max))
         self.min_samples_per_class = mp.Value("i", int(min_samples_per_class))
+        self.training_skip_after_cue_ms = mp.Value(
+            "d", float(training_skip_after_cue_ms)
+        )
         self.update_stride = mp.Value("i", int(update_stride))
         self.fusion_window_edges = mp.Value("i", int(fusion_window_edges))
         self.min_decode_interval_ms = mp.Value("d", float(min_decode_interval_ms))

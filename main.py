@@ -34,6 +34,7 @@ def main():
     fs = 2000
     window_size = 104
     min_samples_per_class = 20
+    training_skip_after_cue_ms = 500.0
     update_stride = 20
     fusion_window_edges = 1
     min_decode_interval_ms = 100.0
@@ -50,6 +51,7 @@ def main():
         cue_duration_min=cue_duration_min,
         cue_duration_max=cue_duration_max,
         min_samples_per_class=min_samples_per_class,
+        training_skip_after_cue_ms=training_skip_after_cue_ms,
         update_stride=update_stride,
         fusion_window_edges=fusion_window_edges,
         min_decode_interval_ms=min_decode_interval_ms,
